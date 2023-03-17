@@ -9,6 +9,7 @@ namespace Oma_Lehed
     {
         public List<Button> buttons { get; set; }
         List<ContentPage> pages { get; set; }
+        Picker pk;
 
         public Start() 
         {
@@ -28,13 +29,23 @@ namespace Oma_Lehed
                 buttons.Add(b);
                 st.Children.Add(b);
                 b.Clicked += B_Clicked;
-                ContentPage p = new ContentPage
-                {
-                    BackgroundColor = Color.FromRgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255))
-                };
+                AlamLeht p = new AlamLeht(dirs[i], files[i]);
                 pages.Add(p);
-
             }
+            pk = new Picker
+            {
+                ItemsSource = dirs,
+                Title = "Tee valik",
+                TitleColor = Color.YellowGreen
+            };
+            pk.SelectedIndexChanged += Pk_SelectedIndexChanged;
+            st.Children.Add(pk);
+            Content = st;
+        }
+
+        private async void Pk_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(pages[pk.SelectedIndex]);
         }
 
         private async void B_Clicked(object sender, EventArgs e)
